@@ -37,7 +37,18 @@ export class CatFacade {
     map(({ error }) => error)
   );
 
-  catsByBreed = (breedId: string, limit?: number) => this.store.select(CatState.catsByBreed(breedId, limit));
+  loadByBreedSuccess$: Observable<Cat[]> = this.actions.pipe(
+    ofActionDispatched(CatsActions.LoadByBreedSuccess),
+    map(({ cats }) => cats)
+  );
+
+  loadByBreedFailure$: Observable<unknown> = this.actions.pipe(
+    ofActionDispatched(CatsActions.LoadByBreedFailure),
+    map(({ error }) => error)
+  );
+
+  catsByBreed = (breedId: string, limit?: number) =>
+    this.store.select(CatState.catsByBreed(breedId, limit));
 
   constructor(
     private readonly store: Store,
@@ -50,5 +61,9 @@ export class CatFacade {
 
   loadBreeds(): void {
     this.store.dispatch(new CatsActions.LoadBreeds());
+  }
+
+  loadByBreed(breedId: string, limit?: number): void {
+    this.store.dispatch(new CatsActions.LoadByBreed(breedId, limit));
   }
 }

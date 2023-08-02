@@ -36,3 +36,24 @@ export class LoadBreedsFailure {
 
   constructor(public readonly error: unknown) {}
 }
+
+export class LoadByBreed {
+  static readonly type = '[Cat] Load by breed';
+
+  constructor(
+    public readonly breedId: string,
+    public readonly limit: number = 10
+  ) {}
+}
+
+export class LoadByBreedSuccess {
+  static readonly type = '[Cat] Load by breed Success';
+
+  constructor(public readonly cats: Cat[]) {}
+}
+
+export class LoadByBreedFailure {
+  static readonly type = '[Cat] Load by breed Failure';
+
+  constructor(public readonly error: unknown) {}
+}

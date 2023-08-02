@@ -118,4 +118,41 @@ export class CatState implements NgxsOnInit {
       )
     );
   }
+
+  @Action(CatsActions.LoadByBreed)
+  loadByBreed(
+    ctx: StateContext<CatStateModel>,
+    { breedId, limit }: CatsActions.LoadByBreed
+  ) {
+    const state = ctx.getState();
+
+    ctx.setState({
+      ...state,
+      loaded: false,
+    });
+
+    return this.catsService.getCats([breedId], limit).pipe(
+      map((cats) => {
+        const state = ctx.getState();
+
+        ctx.setState({
+          ...state,
+          loaded: true,
+          ids: [...state.ids, ...cats.map((cat) => cat.id)],
+          entities: {
+            ...state.entities,
+            ...cats.reduce(
+              (acc, current) => ({ ...acc, [current.id]: current }),
+              {}
+            ),
+          },
+        });
+
+        return ctx.dispatch(new CatsActions.LoadByBreedSuccess(cats));
+      }),
+      catchError((error: unknown) =>
+        ctx.dispatch(new CatsActions.LoadByBreedFailure(error))
+      )
+    );
+  }
 }
