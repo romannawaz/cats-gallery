@@ -1,0 +1,58 @@
+<div class="filter" [ngClass]="{ 'is-loading': isLoading }">
+  <mat-form-field class="full-width">
+    <mat-label>Breeds</mat-label>
+    <mat-select [formControl]="breeds">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let breed of breeds$ | async" [value]="breed.id">{{
+        breed.name
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="limit">
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="decrease()"
+      class="icon"
+      aria-label="Example icon button with a menu icon"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+
+    <button
+      mat-mini-fab
+      color="primary"
+      class="icon"
+      aria-label="Example icon button with a menu icon"
+    >
+      {{ limit }}
+    </button>
+
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="increase()"
+      class="icon"
+      aria-label="Example icon button with a menu icon"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="cats__wrapper">
+  <div class="cats" *ngIf="isLoaded$ | async; else loader">
+    <owl-carousel-o [options]="customOptions">
+      <ng-template carouselSlide *ngFor="let cat of cats$ | async">
+        <div
+          class="image"
+          [ngStyle]="{ 'background-image': styleImport(cat.url) }"
+        ></div>
+      </ng-template>
+    </owl-carousel-o>
+  </div>
+  <ng-template #loader>
+    <app-loader />
+  </ng-template>
+</div>

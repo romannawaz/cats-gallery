@@ -1,0 +1,48 @@
+.filter {
+  width: 550px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  &.is-loading {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .limit {
+    display: flex;
+    gap: 15px;
+
+    > .icon {
+      margin-top: 11px;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.cats {
+  width: 550px;
+  height: 350px;
+
+  &__wrapper {
+    width: 550px;
+    height: 350px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image {
+    width: 550px;
+    height: 350px;
+
+    background-repeat: none;
+    background-position: center;
+    background-size: cover;
+  }
+}
