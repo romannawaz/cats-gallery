@@ -3,6 +3,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { CatApiKeyInterceptor } from '@app/core/api/interceptors/cat-api-key.interceptor';
+import { rootStoreDevConfig } from '@app/store/root/root-store.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,5 +14,6 @@ export const appConfig: ApplicationConfig = {
       multi: true,
     },
     provideAnimations(),
+    rootStoreDevConfig,
   ],
 };
