@@ -4,6 +4,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { CatApiKeyInterceptor } from '@app/core/api/interceptors/cat-api-key.interceptor';
 import { rootStoreDevConfig } from '@app/store/root/root-store.config';
+import { CatStoreModule } from '@app/cats/store/cat-store.module';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +16,6 @@ export const appConfig: ApplicationConfig = {
     },
     provideAnimations(),
     rootStoreDevConfig,
+    importProvidersFrom(CatStoreModule),
   ],
 };
