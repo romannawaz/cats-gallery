@@ -37,6 +37,8 @@ export class CatFacade {
     map(({ error }) => error)
   );
 
+  catsByBreed = (breedId: string, limit?: number) => this.store.select(CatState.catsByBreed(breedId, limit));
+
   constructor(
     private readonly store: Store,
     private readonly actions: Actions

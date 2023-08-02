@@ -48,6 +48,27 @@ export class CatState implements NgxsOnInit {
     return state.breeds;
   }
 
+  static catsByBreed(
+    breedId: string,
+    limit = 10
+  ): (state: CatStateModel) => Cat[] {
+    return createSelector([CatState], (state: CatStateModel) =>
+      !breedId
+        ? Object.values(state.entities).slice(0, limit)
+        : (Object.values(state.entities)
+            .map((cat) => {
+              let match = false;
+
+              if (cat.breeds.length === 0) return null;
+              match = cat.breeds.some((breed) => breed.id === breedId);
+
+              return match ? cat : null;
+            })
+            .filter(Boolean)
+            .slice(0, limit) as Cat[])
+    );
+  }
+
   constructor(private readonly catsService: CatsService) {}
 
   ngxsOnInit(ctx: StateContext<CatStateModel>): void {
