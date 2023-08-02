@@ -1,4 +1,4 @@
-import { Cat } from '@app/cats/common/cat.interface';
+import { Cat, CatBreed } from '@app/cats/common/cat.interface';
 import {
   Action,
   NgxsOnInit,
@@ -17,12 +17,14 @@ export interface CatStateModel {
   readonly loaded: boolean;
   readonly ids: string[];
   readonly entities: Record<string, Cat>;
+  readonly breeds: CatBreed[];
 }
 
 export const initialCatState: CatStateModel = {
   loaded: false,
   ids: [],
   entities: {},
+  breeds: [],
 };
 
 @State<CatStateModel>({
@@ -41,9 +43,15 @@ export class CatState implements NgxsOnInit {
     return Object.values(state.entities);
   }
 
+  @Selector()
+  static breeds(state: CatStateModel): CatBreed[] {
+    return state.breeds;
+  }
+
   constructor(private readonly catsService: CatsService) {}
 
   ngxsOnInit(ctx: StateContext<CatStateModel>): void {
+    ctx.dispatch(new CatsActions.LoadBreeds());
     ctx.dispatch(new CatsActions.Load());
   }
 
@@ -67,6 +75,25 @@ export class CatState implements NgxsOnInit {
       }),
       catchError((error: unknown) =>
         ctx.dispatch(new CatsActions.LoadFailure(error))
+      )
+    );
+  }
+
+  @Action(CatsActions.LoadBreeds)
+  loadBreeds(ctx: StateContext<CatStateModel>) {
+    return this.catsService.getBreeds().pipe(
+      map((breeds) => {
+        const state = ctx.getState();
+
+        ctx.setState({
+          ...state,
+          breeds,
+        });
+
+        return ctx.dispatch(new CatsActions.LoadBreedsSuccess(breeds));
+      }),
+      catchError((error: unknown) =>
+        ctx.dispatch(new CatsActions.LoadBreedsFailure(error))
       )
     );
   }
