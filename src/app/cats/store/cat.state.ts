@@ -1,5 +1,12 @@
 import { Cat } from '@app/cats/common/cat.interface';
-import { Action, NgxsOnInit, State, StateContext } from '@ngxs/store';
+import {
+  Action,
+  NgxsOnInit,
+  Selector,
+  State,
+  StateContext,
+  createSelector,
+} from '@ngxs/store';
 
 import * as CatsActions from './cat.actions';
 import { Injectable } from '@angular/core';
@@ -24,6 +31,16 @@ export const initialCatState: CatStateModel = {
 })
 @Injectable()
 export class CatState implements NgxsOnInit {
+  @Selector()
+  static loaded(state: CatStateModel): boolean {
+    return state.loaded;
+  }
+
+  @Selector()
+  static cats(state: CatStateModel): Cat[] {
+    return Object.values(state.entities);
+  }
+
   constructor(private readonly catsService: CatsService) {}
 
   ngxsOnInit(ctx: StateContext<CatStateModel>): void {
